@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroHQ</title>
+  <link rel="icon" type="image/png" href="images/hqicon.png" />
+  <link rel="apple-touch-icon" href="images/hqicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     LOGIN SCREEN — mostrata prima del desktop
+============================================================ -->
+<div id="login-screen" hidden aria-modal="true" role="dialog" aria-labelledby="login-title">
+  <div class="login-bg"></div>
+  <div class="login-window">
+    <div class="login-header">
+      <div class="login-dots" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <span class="login-header-title">retro_hq.exe</span>
+    </div>
+    <div class="login-body">
+      <div class="login-brand">
+        <span class="login-brand-icon" aria-hidden="true">■</span>
+        <h1 class="login-brand-name" id="login-title">RetroHQ</h1>
+      </div>
+      <p class="login-tagline">Il tuo quartier generale digitale.</p>
+
+      <form id="login-form" novalidate autocomplete="off">
+        <div class="login-field">
+          <label for="login-username" class="login-label">Username</label>
+          <input
+            type="text"
+            id="login-username"
+            class="login-input"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="username"
+            required
+          />
+        </div>
+        <div class="login-field">
+          <label for="login-password" class="login-label">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            class="login-input"
+            autocomplete="off"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <p class="login-error" id="login-error" role="alert" hidden>
+          Credenziali non valide.
+        </p>
+
+        <button type="submit" id="login-btn" class="login-btn">
+          Entra →
+        </button>
+      </form>
+
+      <p class="login-footer">RetroHQ · Accesso privato</p>
+    </div>
+  </div>
+</div>
+
+<div id="os-root">
+
+  <!-- ============================================================
+       DESKTOP — area di lavoro principale
+  ============================================================ -->
+  <main class="desktop" id="desktop">
+
+    <!-- Icone desktop (colonna sinistra) -->
+    <nav class="desktop-icons" id="desktop-icons" aria-label="Applicazioni">
+
+      <button class="desktop-icon" data-window="progetti" aria-label="Apri Atelier Progetti">
+        <div class="icon-box">
+          <div class="icon-art">
+            <div class="icon-folder-tab"></div>
+            <div class="icon-folder-body">
+              <span class="icon-folder-lines"></span>
+            </div>
+          </div>
+        </div>
+        <span class="icon-label">Progetti</span>
+      </button>
+
+      <button class="desktop-icon" data-window="task" aria-label="Apri Matrice Task">
+        <div class="icon-box">
+          <div class="icon-art icon-art--doc">
+            <span class="icon-doc-line"></span>
+            <span class="icon-doc-line icon-doc-line--check"></span>
+            <span class="icon-doc-line"></span>
+            <span class="icon-doc-line icon-doc-line--check"></span>
+          </div>
+        </div>
+        <span class="icon-label">Task Matrix</span>
+      </button>
+
+      <button class="desktop-icon" data-window="note" aria-label="Apri Taccuino Idee">
+        <div class="icon-box">
+          <div class="icon-art icon-art--note">
+            <div class="icon-note-lines">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="icon-note-corner"></div>
+          </div>
+        </div>
+        <span class="icon-label">Taccuino</span>
+      </button>
+
+      <button class="desktop-icon" data-window="obiettivi" aria-label="Apri Obiettivi">
+        <div class="icon-box">
+          <div class="icon-art icon-art--target">
+            <div class="icon-target-outer"></div>
+            <div class="icon-target-mid"></div>
+            <div class="icon-target-inner"></div>
+          </div>
+        </div>
+        <span class="icon-label">Obiettivi</span>
+      </button>
+
+      <button class="desktop-icon" data-window="timer" aria-label="Apri Mangiadischi">
+        <div class="icon-box">
+          <div class="icon-art icon-art--cassette">
+            <div class="icon-cassette-body">
+              <div class="icon-reel"></div>
+              <div class="icon-reel"></div>
+            </div>
+          </div>
+        </div>
+        <span class="icon-label">Mangiadischi</span>
+      </button>
+
+      <button class="desktop-icon" data-window="abitudini" aria-label="Apri Abitudini">
+        <div class="icon-box">
+          <div class="icon-art icon-art--habit">
+            <span class="icon-habit-line icon-habit-line--done"></span>
+            <span class="icon-habit-line icon-habit-line--done"></span>
+            <span class="icon-habit-line"></span>
+            <span class="icon-habit-line"></span>
+          </div>
+        </div>
+        <span class="icon-label">Abitudini</span>
+      </button>
+
+    </nav>
+
+    <!-- Vibe Check — sticky note sempre visibile sul desktop -->
+    <div class="sticky-vibe" id="sticky-vibe">
+      <div class="sticky-header">
+        <span class="sticky-title">vibe_check.txt</span>
+        <div class="sticky-dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <label for="vibe-input" class="sr-only">Intenzione del giorno</label>
+      <input
+        type="text"
+        id="vibe-input"
+        class="vibe-input"
+        placeholder="Oggi si progetta con calma..."
+        maxlength="120"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <!-- ========================================================
+         WINDOWS CONTAINER — finestre floating
+    ======================================================== -->
+    <div id="windows-container">
+
+      <!-- Window: Atelier Progetti -->
+      <div class="os-window" id="window-progetti" data-window-id="progetti" hidden>
+        <div class="os-titlebar" id="titlebar-progetti">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close"  data-action="close"    data-target="progetti" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min"    data-action="minimize" data-target="progetti" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max"    data-action="maximize" data-target="progetti" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">atelier_progetti/</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body">
+          <div class="section-toolbar">
+            <button class="btn btn--primary" id="btn-nuovo-progetto" type="button">+ Nuovo Progetto</button>
+            <div class="filter-group" role="group" aria-label="Filtra per stato">
+              <button class="filter-btn active" data-filter="tutti">Tutti</button>
+              <button class="filter-btn" data-filter="attivo">Attivi</button>
+              <button class="filter-btn" data-filter="pausa">In Pausa</button>
+              <button class="filter-btn" data-filter="concluso">Conclusi</button>
+            </div>
+          </div>
+          <ul class="project-list" id="project-list" role="list" aria-label="Lista progetti">
+            <li class="empty-state" id="projects-empty">
+              <span>Nessun progetto ancora.<br/>Creane uno per iniziare.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Window: Matrice Task -->
+      <div class="os-window" id="window-task" data-window-id="task" hidden>
+        <div class="os-titlebar" id="titlebar-task">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close"  data-action="close"    data-target="task" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min"    data-action="minimize" data-target="task" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max"    data-action="maximize" data-target="task" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">task_matrix.exe</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body">
+          <div class="project-filter-banner" id="project-filter-banner" hidden>
+            <span class="filter-icon">▶</span>
+            <span id="filter-banner-text"></span>
+            <button class="btn btn--ghost btn--xs" id="btn-clear-filter" type="button">✕ Tutti</button>
+          </div>
+          <form class="task-add-form" id="task-add-form" novalidate aria-label="Aggiungi task">
+            <input type="text" id="task-input" class="task-input" placeholder="Nuovo task..." maxlength="200" autocomplete="off" spellcheck="false" aria-required="true" />
+            <select id="task-project-select" class="task-select" aria-label="Progetto">
+              <option value="">— Progetto —</option>
+            </select>
+            <select id="task-priority-select" class="task-select" aria-label="Priorità">
+              <option value="focus">Focus</option>
+              <option value="coda" selected>In Coda</option>
+            </select>
+            <input type="date" id="task-due-date" class="task-select task-date-input" aria-label="Scadenza" title="Scadenza" />
+            <button class="btn btn--primary" type="submit" aria-label="Aggiungi task">+</button>
+          </form>
+
+          <div class="task-section">
+            <h3 class="task-section-label">
+              <span class="label-icon" aria-hidden="true">▶</span>
+              Focus Odierno
+              <span class="task-count" id="focus-count" aria-live="polite">[0/3]</span>
+            </h3>
+            <ul class="task-list" id="task-list-focus" role="list" aria-label="Task focus odierno">
+              <li class="empty-state" id="focus-empty">Cosa conta davvero oggi?</li>
+            </ul>
+          </div>
+
+          <hr class="task-divider" aria-hidden="true" />
+
+          <div class="task-section">
+            <h3 class="task-section-label">
+              <span class="label-icon" aria-hidden="true">▷</span>
+              In Coda
+              <span class="task-count" id="coda-count" aria-live="polite">[0]</span>
+            </h3>
+            <ul class="task-list" id="task-list-coda" role="list" aria-label="Task in coda">
+              <li class="empty-state" id="coda-empty">La coda è vuota. Buon segno.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Window: Taccuino Idee -->
+      <div class="os-window" id="window-note" data-window-id="note" hidden>
+        <div class="os-titlebar" id="titlebar-note">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close"  data-action="close"    data-target="note" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min"    data-action="minimize" data-target="note" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max"    data-action="maximize" data-target="note" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">taccuino_idee.txt</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body">
+          <div class="section-toolbar">
+            <button class="btn btn--primary" id="btn-nuova-nota" type="button">+ Nuova Nota</button>
+            <div class="note-search-wrap">
+              <label for="note-search" class="sr-only">Cerca nelle note</label>
+              <input type="search" id="note-search" class="note-search" placeholder="Cerca..." autocomplete="off" />
+            </div>
+          </div>
+          <form class="note-compose" id="note-compose-form" hidden>
+            <textarea id="note-textarea" class="note-textarea" placeholder="Scrivi qui la tua idea, insight o riflessione..." rows="4" spellcheck="false" aria-required="true"></textarea>
+            <div class="note-compose-actions">
+              <button class="btn btn--primary" type="submit">Salva</button>
+              <button class="btn btn--ghost" id="btn-cancella-nota" type="button">Annulla</button>
+            </div>
+          </form>
+          <div class="note-stream" id="note-stream" role="feed" aria-label="Stream delle note" aria-live="polite">
+            <div class="empty-state" id="notes-empty">
+              <span>Il taccuino è vuoto.<br/>Ogni grande idea inizia con una riga.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Window: Angolo Obiettivi -->
+      <div class="os-window" id="window-obiettivi" data-window-id="obiettivi" hidden>
+        <div class="os-titlebar" id="titlebar-obiettivi">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close"  data-action="close"    data-target="obiettivi" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min"    data-action="minimize" data-target="obiettivi" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max"    data-action="maximize" data-target="obiettivi" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">obiettivi_hw.log</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body">
+          <div class="section-toolbar">
+            <button class="btn btn--primary" id="btn-nuovo-obiettivo" type="button">+ Nuovo Obiettivo</button>
+          </div>
+          <ul class="milestone-list" id="milestone-list" role="list" aria-label="Lista obiettivi">
+            <li class="empty-state" id="milestones-empty">
+              <span>Nessun obiettivo definito.<br/>Dove vuoi arrivare?</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Window: Mangiadischi (Timer Pomodoro) -->
+      <div class="os-window os-window--compact" id="window-timer" data-window-id="timer" hidden>
+        <div class="os-titlebar" id="titlebar-timer">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close"  data-action="close"    data-target="timer" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min"    data-action="minimize" data-target="timer" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max"    data-action="maximize" data-target="timer" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">mangiadischi.wav</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body os-body--center">
+          <div class="cassette-player">
+
+            <div class="cassette-body" id="cassette-body" aria-hidden="true">
+              <div class="cassette-window">
+                <div class="cassette-reel cassette-reel--left" id="reel-left">
+                  <div class="reel-inner"></div>
+                </div>
+                <div class="cassette-tape"></div>
+                <div class="cassette-reel cassette-reel--right" id="reel-right">
+                  <div class="reel-inner"></div>
+                </div>
+              </div>
+              <div class="cassette-label">
+                <span class="cassette-label-text">FOCUS MIX</span>
+              </div>
+            </div>
+
+            <div class="timer-display" id="timer-display">
+              <span class="timer-focus-task" id="timer-focus-task" hidden></span>
+              <span class="timer-mode" id="timer-mode">LAVORO</span>
+              <span class="timer-time" id="timer-time" role="timer" aria-live="polite">25:00</span>
+              <span class="timer-session" id="timer-session">Sessione #1</span>
+            </div>
+
+            <div class="timer-controls" role="group" aria-label="Controlli timer">
+              <button class="btn btn--timer" id="btn-timer-start" type="button">▶ PLAY</button>
+              <button class="btn btn--timer" id="btn-timer-pause" type="button" disabled>⏸ PAUSA</button>
+              <button class="btn btn--timer btn--timer-reset" id="btn-timer-reset" type="button">■ RESET</button>
+            </div>
+
+            <div class="timer-cycle" aria-label="Cicli completati">
+              <span class="cycle-dot" data-cycle="1"></span>
+              <span class="cycle-dot" data-cycle="2"></span>
+              <span class="cycle-dot" data-cycle="3"></span>
+              <span class="cycle-dot" data-cycle="4"></span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Window: Abitudini -->
+      <div class="os-window" id="window-abitudini" data-window-id="abitudini" hidden>
+        <div class="os-titlebar" id="titlebar-abitudini">
+          <div class="os-controls">
+            <button class="os-ctrl os-ctrl--close" data-action="close" data-target="abitudini" aria-label="Chiudi"></button>
+            <button class="os-ctrl os-ctrl--min" data-action="minimize" data-target="abitudini" aria-label="Minimizza"></button>
+            <button class="os-ctrl os-ctrl--max" data-action="maximize" data-target="abitudini" aria-label="Massimizza"></button>
+          </div>
+          <span class="os-title">abitudini.log</span>
+          <div class="os-titlebar-spacer" aria-hidden="true"></div>
+        </div>
+        <div class="os-body">
+          <div class="section-toolbar">
+            <button class="btn btn--primary" id="btn-nuova-abitudine" type="button">+ Nuova Abitudine</button>
+          </div>
+          <form class="habit-add-form" id="habit-add-form" hidden novalidate>
+            <input type="text" id="habit-input" class="task-input" placeholder="Es. Leggere 20 min..." maxlength="80" autocomplete="off" />
+            <button class="btn btn--primary" type="submit">+</button>
+            <button class="btn btn--ghost" id="btn-cancella-abitudine" type="button">✕</button>
+          </form>
+          <div class="habit-progress-header">
+            <span class="habit-today-label">Oggi</span>
+            <span id="habit-today-count" class="habit-today-count">0 / 0</span>
+            <div class="habit-day-bar"><div class="habit-day-fill" id="habit-day-fill" style="width:0%"></div></div>
+          </div>
+          <ul class="habit-list" id="habit-list" role="list">
+            <li class="empty-state" id="habits-empty"><span>Nessuna abitudine.<br/>Costruisci la tua routine.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /windows-container -->
+
+    <div class="desktop-widget widget-quote" id="widget-quote">
+      <span class="widget-quote-text" id="widget-quote-text"></span>
+    </div>
+    <div class="desktop-widget widget-stats" id="widget-stats">
+      <span class="widget-stat"><span class="stat-val" id="stat-tasks-val">0</span> task ✓</span>
+      <span class="widget-sep">·</span>
+      <span class="widget-stat"><span class="stat-val" id="stat-notes-val">0</span> note</span>
+      <span class="widget-sep">·</span>
+      <span class="widget-stat"><span class="stat-val" id="stat-pomodoro-val">0</span> 🍅</span>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       TASKBAR — barra in basso stile OS
+  ============================================================ -->
+  <footer class="taskbar" id="taskbar" role="navigation" aria-label="Barra applicazioni">
+    <div class="taskbar-brand" aria-label="RetroHQ">
+      <span class="brand-icon" aria-hidden="true">■</span>
+      <span class="brand-name">RetroHQ</span>
+    </div>
+    <div class="taskbar-separator" aria-hidden="true"></div>
+    <div class="taskbar-items" id="taskbar-items" role="list" aria-label="Finestre aperte"></div>
+    <div class="taskbar-clock" role="timer" aria-live="polite" aria-label="Orologio">
+      <span id="clock-time" class="clock-time">00:00:00</span>
+      <span id="clock-date" class="clock-date">Lun, 01 Gen</span>
+    </div>
+  </footer>
+
+</div><!-- /os-root -->
+
+<!-- ============================================================
+     MODALI (overlay sopra tutto)
+============================================================ -->
+
+<!-- Modal: Nuovo / Modifica Progetto -->
+<div class="modal-overlay" id="modal-progetto" role="dialog" aria-modal="true" aria-labelledby="modal-progetto-title" hidden>
+  <div class="modal os-window">
+    <div class="os-titlebar">
+      <div class="os-controls">
+        <button class="os-ctrl os-ctrl--close" id="modal-progetto-close" aria-label="Chiudi"></button>
+        <span class="os-ctrl" aria-hidden="true"></span>
+        <span class="os-ctrl" aria-hidden="true"></span>
+      </div>
+      <span class="os-title" id="modal-progetto-title">nuovo_progetto.cfg</span>
+      <div class="os-titlebar-spacer" aria-hidden="true"></div>
+    </div>
+    <div class="os-body">
+      <form id="form-progetto" novalidate aria-label="Dati progetto">
+        <input type="hidden" id="progetto-edit-id" value="" />
+        <div class="form-field">
+          <label for="progetto-titolo" class="form-label">Titolo</label>
+          <input type="text" id="progetto-titolo" class="form-input" placeholder="Es. Lancio Newsletter" maxlength="80" required />
+        </div>
+        <div class="form-field">
+          <label for="progetto-descrizione" class="form-label">Descrizione</label>
+          <textarea id="progetto-descrizione" class="form-textarea" rows="3" maxlength="300" placeholder="Di cosa si tratta?"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="progetto-tag" class="form-label">Categoria</label>
+            <select id="progetto-tag" class="form-select">
+              <option value="marketing">Marketing</option>
+              <option value="sviluppo">Sviluppo</option>
+              <option value="design">Design</option>
+              <option value="business">Business</option>
+              <option value="riflessione">Riflessione</option>
+              <option value="personale">Personale</option>
+              <option value="altro">Altro</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="progetto-stato" class="form-label">Stato</label>
+            <select id="progetto-stato" class="form-select">
+              <option value="attivo">Attivo</option>
+              <option value="pausa">In Pausa</option>
+              <option value="concluso">Concluso</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn--primary" type="submit">Salva Progetto</button>
+          <button class="btn btn--ghost" type="button" id="modal-progetto-annulla">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nuovo / Modifica Obiettivo -->
+<div class="modal-overlay" id="modal-obiettivo" role="dialog" aria-modal="true" aria-labelledby="modal-obiettivo-title" hidden>
+  <div class="modal os-window">
+    <div class="os-titlebar">
+      <div class="os-controls">
+        <button class="os-ctrl os-ctrl--close" id="modal-obiettivo-close" aria-label="Chiudi"></button>
+        <span class="os-ctrl" aria-hidden="true"></span>
+        <span class="os-ctrl" aria-hidden="true"></span>
+      </div>
+      <span class="os-title" id="modal-obiettivo-title">nuovo_obiettivo.log</span>
+      <div class="os-titlebar-spacer" aria-hidden="true"></div>
+    </div>
+    <div class="os-body">
+      <form id="form-obiettivo" novalidate aria-label="Dati obiettivo">
+        <input type="hidden" id="obiettivo-edit-id" value="" />
+        <div class="form-field">
+          <label for="obiettivo-titolo" class="form-label">Titolo Obiettivo</label>
+          <input type="text" id="obiettivo-titolo" class="form-input" placeholder="Es. Raggiungere 10 clienti" maxlength="100" required />
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="obiettivo-corrente" class="form-label">Attuale</label>
+            <input type="number" id="obiettivo-corrente" class="form-input" value="0" min="0" />
+          </div>
+          <div class="form-field">
+            <label for="obiettivo-target" class="form-label">Target</label>
+            <input type="number" id="obiettivo-target" class="form-input" value="100" min="1" required />
+          </div>
+          <div class="form-field">
+            <label for="obiettivo-unita" class="form-label">Unità</label>
+            <input type="text" id="obiettivo-unita" class="form-input" placeholder="clienti" maxlength="20" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn--primary" type="submit">Salva</button>
+          <button class="btn btn--ghost" type="button" id="modal-obiettivo-annulla">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-quick-capture" role="dialog" aria-modal="true" hidden>
+  <div class="modal os-window">
+    <div class="os-titlebar">
+      <div class="os-controls">
+        <button class="os-ctrl os-ctrl--close" id="qc-close" aria-label="Chiudi"></button>
+        <span class="os-ctrl" aria-hidden="true"></span>
+        <span class="os-ctrl" aria-hidden="true"></span>
+      </div>
+      <span class="os-title">quick_capture.exe</span>
+      <div class="os-titlebar-spacer" aria-hidden="true"></div>
+    </div>
+    <div class="os-body">
+      <div class="qc-tabs" role="tablist">
+        <button class="qc-tab active" role="tab" id="qc-tab-task" aria-selected="true" aria-controls="qc-panel-task">Task</button>
+        <button class="qc-tab" role="tab" id="qc-tab-nota" aria-selected="false" aria-controls="qc-panel-nota">Nota</button>
+      </div>
+      <div class="qc-panel" id="qc-panel-task" role="tabpanel">
+        <input type="text" id="qc-task-input" class="form-input" placeholder="Nuovo task..." maxlength="200" autocomplete="off" spellcheck="false" />
+        <div class="qc-row">
+          <select id="qc-task-project" class="form-select"><option value="">— Progetto —</option></select>
+          <select id="qc-task-priority" class="form-select">
+            <option value="focus">Focus</option>
+            <option value="coda" selected>In Coda</option>
+          </select>
+        </div>
+      </div>
+      <div class="qc-panel" id="qc-panel-nota" role="tabpanel" hidden>
+        <textarea id="qc-nota-input" class="note-textarea" rows="4" placeholder="Cattura un'idea..." maxlength="2000" spellcheck="false"></textarea>
+      </div>
+      <div class="qc-footer">
+        <span class="qc-hint">Invio per salvare · Esc per chiudere</span>
+        <button class="btn btn--primary" id="qc-save" type="button">Salva ↵</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="overlay-help" role="dialog" aria-modal="true" hidden>
+  <div class="modal os-window">
+    <div class="os-titlebar">
+      <div class="os-controls">
+        <button class="os-ctrl os-ctrl--close" id="help-close" aria-label="Chiudi"></button>
+        <span class="os-ctrl" aria-hidden="true"></span>
+        <span class="os-ctrl" aria-hidden="true"></span>
+      </div>
+      <span class="os-title">shortcuts.txt</span>
+      <div class="os-titlebar-spacer" aria-hidden="true"></div>
+    </div>
+    <div class="os-body">
+      <table class="shortcut-table">
+        <tbody>
+          <tr><td><kbd>Q</kbd></td><td>Quick Capture</td></tr>
+          <tr><td><kbd>1</kbd></td><td>Apri Progetti</td></tr>
+          <tr><td><kbd>2</kbd></td><td>Apri Task Matrix</td></tr>
+          <tr><td><kbd>3</kbd></td><td>Apri Taccuino</td></tr>
+          <tr><td><kbd>4</kbd></td><td>Apri Obiettivi</td></tr>
+          <tr><td><kbd>5</kbd></td><td>Apri Mangiadischi</td></tr>
+          <tr><td><kbd>6</kbd></td><td>Apri Abitudini</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Questa guida</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Chiudi overlay / finestra</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notifica -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+  <span class="toast-icon" aria-hidden="true">■</span>
+  <span class="toast-message" id="toast-message"></span>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
